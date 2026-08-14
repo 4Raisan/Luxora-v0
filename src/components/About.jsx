@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import './About.css'
-import Reveal from './Reveal'
 
 const About = () => {
+  const [showVisionModal, setShowVisionModal] = useState(false)
+
   const pillars = [
     { icon: '◈', title: 'Discretion', desc: 'Absolute privacy and confidentiality in every engagement.' },
     { icon: '◇', title: 'Craftsmanship', desc: 'Every detail executed to the highest possible standard.' },
@@ -27,7 +29,11 @@ const About = () => {
             ensuring that wherever your estate is located, Luxora&apos;s standard of
             excellence follows seamlessly.
           </p>
-          <button className="about__cta" id="about-our-vision-btn">
+          <button
+            className="about__cta"
+            id="about-our-vision-btn"
+            onClick={() => setShowVisionModal(true)}
+          >
             Our Vision
             <span>→</span>
           </button>
@@ -36,31 +42,61 @@ const About = () => {
         {/* Right Column */}
         <div className="about__right">
           <div className="about__pillars">
-            {pillars.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.1}>
-                <div className="about__pillar">
-                  <div className="about__pillar-icon">{p.icon}</div>
-                  <div>
-                    <h4 className="about__pillar-title">{p.title}</h4>
-                    <p className="about__pillar-desc">{p.desc}</p>
-                  </div>
+            {pillars.map((p) => (
+              <div key={p.title} className="about__pillar">
+                <div className="about__pillar-icon">{p.icon}</div>
+                <div>
+                  <h4 className="about__pillar-title">{p.title}</h4>
+                  <p className="about__pillar-desc">{p.desc}</p>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
 
           {/* Quote */}
-          <Reveal delay={0.1}>
-            <div className="about__quote">
+          <div className="about__quote">
             <div className="about__quote-mark">&ldquo;</div>
             <p>
               The finest luxury is not what you own, but the life you live within it.
             </p>
             <div className="about__quote-author">— Luxora Founding Charter</div>
           </div>
-          </Reveal>
         </div>
       </div>
+
+      {/* Our Vision Modal Pop-up Window */}
+      {showVisionModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowVisionModal(false)}>
+          <div className="about-modal__window vision-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowVisionModal(false)}
+              aria-label="Close Vision Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">OUR VISION</div>
+            <h2 className="about-modal__title">Excellence Refined</h2>
+            
+            <div className="vision-modal__quote-wrap">
+              <span className="vision-modal__quote-mark">“</span>
+              <p className="vision-modal__quote">
+                To become Sri Lanka&apos;s most trusted home concierge platform, delivering premium, convenient, and reliable home services that simplify everyday living.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowVisionModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

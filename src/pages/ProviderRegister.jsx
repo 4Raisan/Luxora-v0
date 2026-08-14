@@ -20,10 +20,10 @@ const UploadBox = ({ label, id, onChange, preview }) => (
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span>Click to upload or drag &amp; drop</span>
+          <span>Click to upload image file (JPG, PNG)</span>
         </>
       )}
-      <input id={id} type="file" accept="image/*" style={{ display: 'none' }} onChange={onChange} />
+      <input id={id} type="file" accept="image/png, image/jpeg, image/webp, image/*" style={{ display: 'none' }} onChange={onChange} />
     </label>
   </div>
 )
@@ -32,6 +32,8 @@ const ProviderRegister = () => {
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [otpSent, setOtpSent] = useState(false)
+  const [isOtpVerified, setIsOtpVerified] = useState(false)
+  const [otpError, setOtpError] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
@@ -55,18 +57,35 @@ const ProviderRegister = () => {
   })
 
   const serviceOptions = [
-    'Auto Care', 'Garden Care', 'Pet Wellness',
-    'Estate Staffing', 'Security & Privacy', 'Travel & Leisure',
-    'Home Cleaning', 'Private Chef', 'Tech Support',
+    'Auto Care', 'Garden Care', 'Pet Care',
   ]
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
+  const handleNicChange = (e) => {
+    const val = e.target.value.slice(0, 12)
+    setForm((prev) => ({ ...prev, nicNumber: val }))
+  }
+
+  const handleMobileChange = (e) => {
+    const numbersOnly = e.target.value.replace(/\D/g, '').slice(0, 10)
+    setForm((prev) => ({ ...prev, mobile: numbersOnly }))
+  }
+
+  const handleOtpChange = (e) => {
+    const numbersOnly = e.target.value.replace(/\D/g, '').slice(0, 4)
+    setForm((prev) => ({ ...prev, otp: numbersOnly }))
+  }
+
   const handleFileChange = (field, previewField) => (e) => {
     const file = e.target.files[0]
     if (!file) return
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file only (JPG, PNG, WEBP).')
+      return
+    }
     const url = URL.createObjectURL(file)
     setForm((prev) => ({ ...prev, [field]: file, [previewField]: url }))
   }
@@ -80,13 +99,48 @@ const ProviderRegister = () => {
     }))
   }
 
-  const handleOtp = () => {
-    if (!form.mobile) return
+  const handleSendOtp = () => {
+    if (!form.mobile || form.mobile.length !== 10) {
+      alert('Please enter a valid 10-digit mobile number before requesting OTP.')
+      return
+    }
     setOtpSent(true)
+    setIsOtpVerified(false)
+    setOtpError('')
+    if (!form.otp) setForm(prev => ({ ...prev, otp: '1234' }))
+  }
+
+  const handleVerifyOtp = () => {
+    if (!form.otp || form.otp.length !== 4) {
+      setOtpError('Please enter a valid 4-digit OTP code.')
+      return
+    }
+    setIsOtpVerified(true)
+    setOtpError('')
   }
 
   const nextStep = (e) => {
     e.preventDefault()
+    if (step === 0) {
+      if (form.mobile.length !== 10) {
+        alert('Mobile number must be exactly 10 digits.')
+        return
+      }
+      if (!otpSent) {
+        alert('Please click SEND OTP to receive your mobile verification code.')
+        return
+      }
+      if (!isOtpVerified) {
+        alert('Mobile OTP verification required! Please enter the 4-digit OTP code and click VERIFY OTP before proceeding.')
+        return
+      }
+    }
+    if (step === 2) {
+      if (form.services.length === 0) {
+        alert('Please select at least one service offered (Auto Care, Garden Care, or Pet Care).')
+        return
+      }
+    }
     if (step < steps.length - 1) setStep(step + 1)
   }
 
@@ -181,18 +235,18 @@ const ProviderRegister = () => {
           <form className="pr-form" onSubmit={nextStep} id="pr-step1-form">
             <div className="pr-row">
               <input id="pr-fullname" name="fullName" type="text" className="pr-input"
-                placeholder="Full Name as per NIC" value={form.fullName}
+                placeholder="Full Name" value={form.fullName}
                 onChange={handleChange} required />
               <input id="pr-nic" name="nicNumber" type="text" className="pr-input"
                 placeholder="NIC Number" value={form.nicNumber}
-                onChange={handleChange} required />
+                onChange={handleNicChange} maxLength={12} required />
             </div>
 
             <div className="pr-row">
-              <UploadBox label="NIC FRONT PHOTO" id="nic-front"
+              <UploadBox label="NIC FRONT PHOTO (IMAGE ONLY)" id="nic-front"
                 onChange={handleFileChange('nicFront', 'nicFrontPreview')}
                 preview={form.nicFrontPreview} />
-              <UploadBox label="NIC BACK PHOTO" id="nic-back"
+              <UploadBox label="NIC BACK PHOTO (IMAGE ONLY)" id="nic-back"
                 onChange={handleFileChange('nicBack', 'nicBackPreview')}
                 preview={form.nicBackPreview} />
             </div>
@@ -200,18 +254,39 @@ const ProviderRegister = () => {
             <div className="pr-row pr-row--otp">
               <input id="pr-mobile" name="mobile" type="tel" className="pr-input"
                 placeholder="Mobile Number" value={form.mobile}
-                onChange={handleChange} required />
+                onChange={(e) => { handleMobileChange(e); setIsOtpVerified(false); setOtpSent(false) }}
+                maxLength={10} inputMode="numeric" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number" required />
               <button type="button" id="pr-send-otp-btn"
-                className={`pr-otp-btn ${otpSent ? 'pr-otp-btn--sent' : ''}`}
-                onClick={handleOtp}>
-                {otpSent ? 'OTP SENT ✓' : 'SEND OTP'}
+                className={`pr-otp-btn ${isOtpVerified ? 'pr-otp-btn--sent' : otpSent ? 'pr-otp-btn--sent' : ''}`}
+                onClick={handleSendOtp} disabled={isOtpVerified}>
+                {isOtpVerified ? 'VERIFIED ✓' : otpSent ? 'RESEND OTP' : 'SEND OTP'}
               </button>
             </div>
 
-            {otpSent && (
-              <input id="pr-otp" name="otp" type="text" className="pr-input"
-                placeholder="Enter OTP" value={form.otp}
-                onChange={handleChange} required maxLength={6} />
+            {otpSent && !isOtpVerified && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', background: '#111', padding: '0.85rem', borderRadius: '8px', border: '1px solid #222' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--gold)', fontSize: '0.75rem', fontWeight: '600' }}>
+                    📱 Enter OTP sent to +94 {form.mobile}
+                  </span>
+                  <small style={{ color: '#888', fontSize: '0.7rem' }}>Demo OTP: <strong style={{ color: '#fff' }}>1234</strong></small>
+                </div>
+                <div className="pr-row" style={{ gridTemplateColumns: '1fr auto', gap: '0.6rem' }}>
+                  <input id="pr-otp" name="otp" type="text" className="pr-input"
+                    placeholder="Enter 4-Digit OTP" value={form.otp}
+                    onChange={(e) => { handleOtpChange(e); setOtpError('') }} required maxLength={4} inputMode="numeric" pattern="[0-9]{4}" title="Please enter a 4-digit OTP code" />
+                  <button type="button" className="pr-otp-btn" style={{ background: 'var(--gold)', color: '#000', fontWeight: '800' }} onClick={handleVerifyOtp}>
+                    VERIFY OTP
+                  </button>
+                </div>
+                {otpError && <span style={{ color: '#ef4444', fontSize: '0.75rem' }}>{otpError}</span>}
+              </div>
+            )}
+
+            {isOtpVerified && (
+              <div style={{ background: 'rgba(34, 197, 94, 0.12)', border: '1px solid rgba(34, 197, 94, 0.3)', color: '#4ade80', padding: '0.7rem 1rem', borderRadius: '8px', fontSize: '0.8rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                ✓ Mobile Number +94 {form.mobile} Verified Successfully
+              </div>
             )}
 
             <div className="pr-actions">

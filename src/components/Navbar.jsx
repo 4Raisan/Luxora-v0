@@ -14,7 +14,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navLinks = ['Home', 'Services', 'Membership', 'About', 'Contact']
+  const navLinks = ['Home', 'Services', 'Plans', 'Membership', 'Contact']
 
   const handleNavClick = (link) => {
     setActiveLink(link)

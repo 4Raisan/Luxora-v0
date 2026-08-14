@@ -109,7 +109,7 @@
   z-index: 2;
   display: flex;
   align-items: center;
-  gap: 0;
+  justify-content: space-between;
   margin: 2rem 0 1.5rem;
   width: 100%;
   max-width: 500px;
@@ -118,56 +118,62 @@
 
 .pr-progress-track {
   position: absolute;
-  left: 2.5rem;
-  right: 2.5rem;
+  left: 2.2rem;
+  right: 2.2rem;
   top: 50%;
   transform: translateY(-50%);
-  height: 2px;
+  height: 3px;
   background: #222;
-  z-index: -1;
+  z-index: 1;
 }
 
 .pr-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 2px;
-  transition: width 0.5s ease;
+  background: linear-gradient(90deg, var(--gold), #f3e5ab);
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.5);
 }
 
 .pr-step-dot {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 2px solid #333;
-  background: #141414;
-  color: #555;
-  font-size: 0.7rem;
+  border: 2px solid #2a2a2a;
+  background: #0a0a0a;
+  color: #666;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.4s ease;
-  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
 .pr-step-dot:not(:last-child) {
-  margin-right: auto;
+  margin-right: 0;
 }
 
 .pr-step-dot.active {
   border-color: var(--gold);
   color: var(--gold);
-  background: rgba(201,168,76,0.1);
-  box-shadow: 0 0 0 4px rgba(201,168,76,0.1);
+  background: #141414;
+  box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.2), 0 0 15px rgba(201, 168, 76, 0.3);
+  transform: scale(1.08);
 }
 
 .pr-step-dot.done {
   border-color: var(--gold);
   background: var(--gold);
   color: #000;
-  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.4);
 }
 
 /* ─── Card ──────────────────────────────────────────────── */
@@ -182,6 +188,7 @@
   max-width: 500px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.04) inset;
   animation: fadeInUp 0.4s ease both;
+  backface-visibility: hidden;
 }
 
 /* Step Header */
@@ -195,18 +202,23 @@
 }
 
 .pr-card__step-num {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(201,168,76,0.15);
   border: 1px solid rgba(201,168,76,0.3);
   color: var(--gold);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+  box-sizing: border-box;
 }
 
 .pr-card__step-title {

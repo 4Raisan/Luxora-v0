@@ -32,14 +32,6 @@
   );
 }
 
-.hero__glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  transition: background 0.4s ease-out;
-  z-index: 1;
-}
-
 /* Content */
 .hero__content {
   position: relative;

@@ -1,22 +1,69 @@
+import { useState } from 'react'
 import './Footer.css'
 
 const Footer = () => {
   const year = new Date().getFullYear()
+  const [showAboutModal, setShowAboutModal] = useState(false)
+  const [showVisionModal, setShowVisionModal] = useState(false)
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false)
+  const [showTermsModal, setShowTermsModal] = useState(false)
+  const [showMembershipTermsModal, setShowMembershipTermsModal] = useState(false)
+  const [showCookieModal, setShowCookieModal] = useState(false)
 
   const columns = [
     {
       heading: 'Services',
-      links: ['Auto Care', 'Garden Care', 'Pet Wellness', 'Estate Staffing', 'Security & Privacy', 'Travel & Leisure'],
+      links: ['Auto Care', 'Garden Care', 'Pet Wellness'],
     },
     {
       heading: 'Company',
-      links: ['Our Vision', 'Careers', 'Global Offices', 'Contact'],
+      links: ['About Us', 'Our Vision', 'Office', 'Contact'],
     },
     {
       heading: 'Legal',
       links: ['Privacy Policy', 'Terms of Service', 'Membership T&Cs', 'Cookie Policy'],
     },
   ]
+
+  const handleLinkClick = (e, link) => {
+    if (link === 'Office') {
+      return
+    }
+    if (link === 'Auto Care') {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent('select-plan-category', { detail: 'auto' }))
+      const el = document.getElementById('plans')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    } else if (link === 'Garden Care') {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent('select-plan-category', { detail: 'garden' }))
+      const el = document.getElementById('plans')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    } else if (link === 'Pet Wellness' || link === 'Pet Care') {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent('select-plan-category', { detail: 'pet' }))
+      const el = document.getElementById('plans')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    } else if (link === 'About Us') {
+      e.preventDefault()
+      setShowAboutModal(true)
+    } else if (link === 'Our Vision') {
+      e.preventDefault()
+      setShowVisionModal(true)
+    } else if (link === 'Privacy Policy' || link === 'Privacy') {
+      e.preventDefault()
+      setShowPrivacyModal(true)
+    } else if (link === 'Terms of Service' || link === 'Terms') {
+      e.preventDefault()
+      setShowTermsModal(true)
+    } else if (link === 'Membership T&Cs') {
+      e.preventDefault()
+      setShowMembershipTermsModal(true)
+    } else if (link === 'Cookie Policy' || link === 'Cookies') {
+      e.preventDefault()
+      setShowCookieModal(true)
+    }
+  }
 
   return (
     <footer className="footer" id="contact">
@@ -63,9 +110,12 @@ const Footer = () => {
                 {col.links.map((link) => (
                   <li key={link}>
                     <a
-                      href="#"
+                      href={link === 'Office' ? 'https://maps.app.goo.gl/jZdwk72amn72NpRp8' : '#'}
+                      target={link === 'Office' ? '_blank' : undefined}
+                      rel={link === 'Office' ? 'noopener noreferrer' : undefined}
                       className="footer__link"
                       id={`footer-${link.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                      onClick={(e) => handleLinkClick(e, link)}
                     >
                       {link}
                     </a>
@@ -85,14 +135,383 @@ const Footer = () => {
             © {year} LUXORA Concierge. All rights reserved.
           </p>
           <div className="footer__bottom-links">
-            <a href="#" className="footer__bottom-link">Privacy</a>
+            <a href="#" className="footer__bottom-link" onClick={(e) => handleLinkClick(e, 'Privacy')}>Privacy</a>
             <span className="footer__dot">·</span>
-            <a href="#" className="footer__bottom-link">Terms</a>
+            <a href="#" className="footer__bottom-link" onClick={(e) => handleLinkClick(e, 'Terms')}>Terms</a>
             <span className="footer__dot">·</span>
-            <a href="#" className="footer__bottom-link">Cookies</a>
+            <a href="#" className="footer__bottom-link" onClick={(e) => handleLinkClick(e, 'Cookies')}>Cookies</a>
           </div>
         </div>
       </div>
+
+      {/* About Us Modal Pop-up Window */}
+      {showAboutModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowAboutModal(false)}>
+          <div className="about-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowAboutModal(false)}
+              aria-label="Close About Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">ABOUT US</div>
+            <h2 className="about-modal__title">Welcome to Luxora</h2>
+            
+            <div className="about-modal__content">
+              <p>
+                At Luxora, we make home care simple, convenient, and reliable. Our subscription-based concierge platform connects homeowners with trusted professionals for essential home maintenance services.
+              </p>
+              <p>
+                Whether it&apos;s keeping your car spotless, maintaining a beautiful garden, or ensuring your pets receive quality care, Luxora helps you manage everything in one place.
+              </p>
+              <p>
+                We are committed to delivering high-quality service, saving you time, and providing peace of mind through flexible subscription plans designed for modern lifestyles.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowAboutModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Our Vision Modal Pop-up Window */}
+      {showVisionModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowVisionModal(false)}>
+          <div className="about-modal__window vision-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowVisionModal(false)}
+              aria-label="Close Vision Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">OUR VISION</div>
+            <h2 className="about-modal__title">Excellence Refined</h2>
+            
+            <div className="vision-modal__quote-wrap">
+              <span className="vision-modal__quote-mark">“</span>
+              <p className="vision-modal__quote">
+                To become Sri Lanka&apos;s most trusted home concierge platform, delivering premium, convenient, and reliable home services that simplify everyday living.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowVisionModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Privacy Policy Modal Pop-up Window */}
+      {showPrivacyModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowPrivacyModal(false)}>
+          <div className="about-modal__window privacy-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowPrivacyModal(false)}
+              aria-label="Close Privacy Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">LEGAL</div>
+            <h2 className="about-modal__title">Privacy Policy</h2>
+            
+            <div className="about-modal__content privacy-modal__content">
+              <p>
+                At Luxora, we value your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our website and services.
+              </p>
+
+              <h3>1. Information We Collect</h3>
+              <p>We may collect the following information:</p>
+              <ul>
+                <li>Full name</li>
+                <li>Email address</li>
+                <li>Phone number</li>
+                <li>Home address (for service delivery)</li>
+                <li>Payment information (processed securely through our payment providers)</li>
+                <li>Account and subscription details</li>
+                <li>Website usage information, such as pages visited and device information</li>
+              </ul>
+
+              <h3>2. How We Use Your Information</h3>
+              <p>We use your information to:</p>
+              <ul>
+                <li>Provide and manage our services</li>
+                <li>Process subscriptions and payments</li>
+                <li>Schedule and deliver home services</li>
+                <li>Respond to customer inquiries</li>
+                <li>Improve our website and customer experience</li>
+                <li>Send service updates and important notifications</li>
+              </ul>
+
+              <h3>3. Information Sharing</h3>
+              <p>Luxora does not sell your personal information. We may share your information only with:</p>
+              <ul>
+                <li>Verified service providers assigned to your booking</li>
+                <li>Trusted payment processing partners</li>
+                <li>Legal authorities when required by applicable law</li>
+              </ul>
+
+              <h3>4. Data Security</h3>
+              <p>
+                We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, loss, misuse, or disclosure.
+              </p>
+
+              <h3>5. Cookies</h3>
+              <p>
+                Our website may use cookies to improve your browsing experience, remember your preferences, and analyze website performance. You can manage cookie preferences through your browser settings.
+              </p>
+
+              <h3>6. Your Rights</h3>
+              <p>You have the right to:</p>
+              <ul>
+                <li>Access your personal information</li>
+                <li>Request corrections to inaccurate information</li>
+                <li>Request deletion of your account and personal data (subject to legal requirements)</li>
+                <li>Opt out of marketing communications at any time</li>
+              </ul>
+
+              <h3>7. Third-Party Services</h3>
+              <p>
+                Our website may contain links to third-party websites or use third-party services such as payment gateways. Their privacy practices are governed by their own privacy policies.
+              </p>
+
+              <h3>8. Changes to This Privacy Policy</h3>
+              <p>
+                We may update this Privacy Policy from time to time. Any changes will be posted on this page along with the updated effective date.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowPrivacyModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terms of Service Modal Pop-up Window */}
+      {showTermsModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowTermsModal(false)}>
+          <div className="about-modal__window privacy-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowTermsModal(false)}
+              aria-label="Close Terms Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">LEGAL</div>
+            <h2 className="about-modal__title">Terms of Service</h2>
+            
+            <div className="about-modal__content privacy-modal__content">
+              <p>
+                Welcome to Luxora. By accessing or using our website and services, you agree to comply with these Terms of Service. Please read them carefully before using our platform.
+              </p>
+
+              <h3>1. Acceptance of Terms</h3>
+              <p>
+                By creating an account, purchasing a subscription, or using any Luxora service, you agree to be bound by these Terms of Service and our Privacy Policy.
+              </p>
+
+              <h3>2. Our Services</h3>
+              <p>Luxora provides subscription-based home concierge services, including but not limited to:</p>
+              <ul>
+                <li>Car Care</li>
+                <li>Garden Care</li>
+                <li>Pet Care</li>
+                <li>Additional home maintenance services offered through our platform</li>
+              </ul>
+              <p>Service availability may vary depending on your location and subscription plan.</p>
+
+              <h3>3. User Responsibilities</h3>
+              <p>As a user, you agree to:</p>
+              <ul>
+                <li>Provide accurate and up-to-date information.</li>
+                <li>Maintain the security of your account credentials.</li>
+                <li>Use our services only for lawful purposes.</li>
+                <li>Treat our service professionals with respect and professionalism.</li>
+              </ul>
+
+              <h3>4. Subscriptions and Payments</h3>
+              <ul>
+                <li>Subscription fees are charged according to the selected plan.</li>
+                <li>Payments must be completed before services are provided.</li>
+                <li>Subscription renewals and cancellation policies will be outlined during the subscription process.</li>
+                <li>Additional services outside your subscription may incur extra charges.</li>
+              </ul>
+
+              <h3>5. Cancellations and Refunds</h3>
+              <p>
+                Customers may cancel or reschedule services according to Luxora&apos;s cancellation policy. Refund eligibility depends on the type of service, timing of cancellation, and applicable subscription terms.
+              </p>
+
+              <h3>6. Service Availability</h3>
+              <p>
+                While we strive to provide reliable services, Luxora cannot guarantee uninterrupted availability. Services may be delayed or unavailable due to weather, emergencies, technical issues, or circumstances beyond our control.
+              </p>
+
+              <h3>7. Limitation of Liability</h3>
+              <p>
+                Luxora is not liable for indirect, incidental, or consequential damages arising from the use of our website or services. Our liability is limited to the extent permitted by applicable law.
+              </p>
+
+              <h3>8. Intellectual Property</h3>
+              <p>
+                All content on the Luxora website, including text, logos, graphics, images, and software, is the property of Luxora and may not be copied, reproduced, or distributed without prior written permission.
+              </p>
+
+              <h3>9. Account Suspension or Termination</h3>
+              <p>
+                Luxora reserves the right to suspend or terminate accounts that violate these Terms of Service, engage in fraudulent activities, or misuse the platform.
+              </p>
+
+              <h3>10. Changes to These Terms</h3>
+              <p>
+                We may update these Terms of Service from time to time. Updated versions will be published on this page with the revised effective date.
+              </p>
+
+              <h3>11. Governing Law</h3>
+              <p>
+                These Terms of Service are governed by the laws of Sri Lanka. Any disputes arising from these terms shall be subject to the jurisdiction of the courts of Sri Lanka.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowTermsModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Membership Terms & Conditions Modal Pop-up Window */}
+      {showMembershipTermsModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowMembershipTermsModal(false)}>
+          <div className="about-modal__window privacy-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowMembershipTermsModal(false)}
+              aria-label="Close Membership Terms Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">LEGAL</div>
+            <h2 className="about-modal__title">Membership Terms &amp; Conditions</h2>
+            
+            <div className="about-modal__content privacy-modal__content">
+              <ul>
+                <li>Membership is available to registered users aged 18 or above.</li>
+                <li>Subscription fees must be paid to access membership benefits.</li>
+                <li>Benefits are available only while your membership is active.</li>
+                <li>Unused services cannot be transferred or exchanged for cash.</li>
+                <li>Additional services outside your plan may incur extra charges.</li>
+                <li>You may cancel your membership at any time; cancellation takes effect according to your billing cycle.</li>
+                <li>Luxora reserves the right to modify membership plans, pricing, or benefits with prior notice.</li>
+                <li>Misuse of membership benefits may result in suspension or termination of your account.</li>
+                <li>By subscribing, you agree to Luxora&apos;s Terms of Service and Privacy Policy.</li>
+              </ul>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowMembershipTermsModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cookie Policy Modal Pop-up Window */}
+      {showCookieModal && (
+        <div className="about-modal__backdrop" onClick={() => setShowCookieModal(false)}>
+          <div className="about-modal__window privacy-modal__window" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="about-modal__close"
+              onClick={() => setShowCookieModal(false)}
+              aria-label="Close Cookie Policy Window"
+            >
+              ✕
+            </button>
+            
+            <div className="about-modal__badge">LEGAL</div>
+            <h2 className="about-modal__title">Cookie Policy</h2>
+            
+            <div className="about-modal__content privacy-modal__content">
+              <p>
+                Luxora uses cookies and similar technologies to improve your browsing experience, understand how users interact with our website, and provide better services.
+              </p>
+
+              <h3>1. What Are Cookies?</h3>
+              <p>
+                Cookies are small text files stored on your device when you visit a website. They help websites remember your preferences and improve functionality.
+              </p>
+
+              <h3>2. How We Use Cookies</h3>
+              <p>Luxora uses cookies to:</p>
+              <ul>
+                <li>Improve website performance and user experience.</li>
+                <li>Remember user preferences and settings.</li>
+                <li>Analyze website traffic and usage.</li>
+                <li>Support security and account functionality.</li>
+              </ul>
+
+              <h3>3. Managing Cookies</h3>
+              <p>
+                You can control or disable cookies through your browser settings. However, disabling cookies may affect some website features.
+              </p>
+
+              <h3>4. Third-Party Cookies</h3>
+              <p>
+                We may use trusted third-party services that place cookies for analytics, payment processing, or improving service performance.
+              </p>
+
+              <h3>5. Updates to This Policy</h3>
+              <p>
+                Luxora may update this Cookie Policy from time to time. Any changes will be posted on this page.
+              </p>
+            </div>
+
+            <div className="about-modal__footer">
+              <button
+                className="about-modal__btn"
+                onClick={() => setShowCookieModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   )
 }

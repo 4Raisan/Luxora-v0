@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Hero.css'
 
 const Hero = () => {
+  const navigate = useNavigate()
   const headingRef = useRef(null)
   const subtitleRef = useRef(null)
   const actionsRef = useRef(null)
-  const glowRef = useRef(null)
 
   useEffect(() => {
     const els = [headingRef.current, subtitleRef.current, actionsRef.current]
@@ -15,16 +16,6 @@ const Hero = () => {
         el.classList.add('animate-fade-up')
       }
     })
-
-    const onMove = (e) => {
-      if (!glowRef.current) return
-      const { innerWidth: w, innerHeight: h } = window
-      const x = (e.clientX / w) * 100
-      const y = (e.clientY / h) * 100
-      glowRef.current.style.background = `radial-gradient(600px 400px at ${x}% ${y}%, rgba(201,168,76,0.12), transparent 60%)`
-    }
-    window.addEventListener('mousemove', onMove)
-    return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   const scrollTo = (id) => {
@@ -37,7 +28,6 @@ const Hero = () => {
       {/* Background */}
       <div className="hero__bg">
         <div className="hero__overlay" />
-        <div className="hero__glow" ref={glowRef} />
       </div>
 
       {/* Content */}
@@ -61,7 +51,7 @@ const Hero = () => {
           <button
             className="hero__btn-primary"
             id="hero-begin-btn"
-            onClick={() => scrollTo('membership')}
+            onClick={() => navigate('/signup')}
           >
             Begin Your Journey
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -70,10 +60,10 @@ const Hero = () => {
           </button>
           <button
             className="hero__btn-secondary"
-            id="hero-services-btn"
-            onClick={() => scrollTo('services')}
+            id="hero-plans-btn"
+            onClick={() => scrollTo('plans')}
           >
-            View Services
+            View Plans
           </button>
         </div>
       </div>

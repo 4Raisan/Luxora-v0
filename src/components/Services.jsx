@@ -42,44 +42,9 @@ const services = [
     description: 'Luxury pet care, grooming, veterinary coordination, and bespoke animal wellness programs.',
     features: ['Premium Grooming', 'Vet Coordination', 'Pet Sitting & Training'],
   },
-  {
-    id: 'estate-staffing',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 22a8 8 0 100-16 8 8 0 000 16zM8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M34 28l4 4 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    title: 'Estate Staffing',
-    description: 'Curated recruitment of world-class household staff — butlers, chefs, housekeepers, and more.',
-    features: ['Butler & Chef Placement', 'Household Management', 'Background Verification'],
-  },
-  {
-    id: 'security',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 6l-16 6v14c0 9 7 17 16 20 9-3 16-11 16-20V12L24 6z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <path d="M17 24l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    title: 'Security & Privacy',
-    description: 'Discreet, elite-level residential security systems and personal protection services.',
-    features: ['Smart Home Security', 'Personal Protection', 'Digital Privacy'],
-  },
-  {
-    id: 'travel',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 38l8-8 6 4 12-16 10 4-16 20-6-4-8 6-6-6z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <circle cx="38" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
-        <path d="M38 9v3l2 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'Travel & Leisure',
-    description: 'Bespoke travel experiences, private jet coordination, and exclusive global destination access.',
-    features: ['Private Jet Charter', 'Luxury Itineraries', 'VIP Access & Tickets'],
-  },
 ]
+
+
 
 const Services = () => {
   const cardsRef = useRef([])

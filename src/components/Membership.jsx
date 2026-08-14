@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './Membership.css'
-import Reveal from './Reveal'
 
 const Membership = () => {
   const [form, setForm] = useState({
@@ -59,23 +58,7 @@ const Membership = () => {
             </a>
           </div>
 
-          {/* Decorative */}
-          <div className="membership__decor">
-            <div className="membership__decor-line" />
-            <span>Application Process</span>
-            <div className="membership__decor-line" />
-          </div>
 
-          <div className="membership__steps">
-            {['Submit Application', 'Curator Review', 'Private Consultation', 'Welcome to Luxora'].map((step, i) => (
-              <Reveal key={step} delay={i * 0.1}>
-                <div className="membership__step">
-                  <div className="membership__step-num">{i + 1}</div>
-                  <span>{step}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
 
         {/* Right Form */}
@@ -134,7 +117,7 @@ const Membership = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="interest" className="form-label">PRIMARY INTEREST</label>
+                <label htmlFor="interest" className="form-label">PRIMARY INTEREST SERVICES</label>
                 <div className="form-select-wrap">
                   <select
                     id="interest"
@@ -148,10 +131,6 @@ const Membership = () => {
                     <option value="auto">Auto Care</option>
                     <option value="garden">Garden Care</option>
                     <option value="pet">Pet Wellness</option>
-                    <option value="staffing">Estate Staffing</option>
-                    <option value="security">Security & Privacy</option>
-                    <option value="travel">Travel & Leisure</option>
-                    <option value="full">Full Membership</option>
                   </select>
                   <svg className="form-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
